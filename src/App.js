@@ -5,6 +5,8 @@ import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import './App.css';
 import Routes from './Routes';
 import { Auth } from 'aws-amplify';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 
 function App(props) {
   const [isAuthenticating, setIsAuthenticating] = useState(true);

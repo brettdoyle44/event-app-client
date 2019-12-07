@@ -1,11 +1,12 @@
 export default {
+  MAX_ATTACHMENT_SIZE: 5000000,
   s3: {
     REGION: 'us-east-2',
     BUCKET: 'event-image-upload'
   },
   apiGateway: {
     REGION: 'us-east-2',
-    URL: 'https://4rz2r2wb34.execute-api.us-east-2.amazonaws.com/prod/'
+    URL: 'https://4rz2r2wb34.execute-api.us-east-2.amazonaws.com/prod'
   },
   cognito: {
     REGION: 'us-east-2',
