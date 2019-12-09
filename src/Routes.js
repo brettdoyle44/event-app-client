@@ -6,6 +6,7 @@ import Login from './containers/Login';
 import AppliedRoute from './components/AppliedRoute';
 import Signup from './containers/Signup';
 import NewEvent from './containers/NewEvent';
+import Events from './containers/Events';
 
 export default function Routes({ appProps }) {
   return (
@@ -22,6 +23,12 @@ export default function Routes({ appProps }) {
         path="/events/new"
         exact
         component={NewEvent}
+        appProps={appProps}
+      />
+      <AppliedRoute
+        path="/events/:id"
+        exact
+        component={Events}
         appProps={appProps}
       />
       <Route component={NotFound} />
