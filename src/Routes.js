@@ -7,25 +7,32 @@ import AppliedRoute from './components/AppliedRoute';
 import Signup from './containers/Signup';
 import NewEvent from './containers/NewEvent';
 import Events from './containers/Events';
+import AuthenticatedRoute from './components/AuthenticatedRoute';
+import UnauthenticatedRoute from './components/UnauthenticatedRoute';
 
 export default function Routes({ appProps }) {
   return (
     <Switch>
       <AppliedRoute path="/" exact component={Home} appProps={appProps} />
-      <AppliedRoute path="/login" exact component={Login} appProps={appProps} />
-      <AppliedRoute
+      <UnauthenticatedRoute
+        path="/login"
+        exact
+        component={Login}
+        appProps={appProps}
+      />
+      <UnauthenticatedRoute
         path="/signup"
         exact
         component={Signup}
         appProps={appProps}
       />
-      <AppliedRoute
+      <AuthenticatedRoute
         path="/events/new"
         exact
         component={NewEvent}
         appProps={appProps}
       />
-      <AppliedRoute
+      <AuthenticatedRoute
         path="/events/:id"
         exact
         component={Events}

@@ -3,14 +3,16 @@ import { API, Storage } from 'aws-amplify';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import LoaderButton from '../components/LoaderButton';
 import config from '../config';
+import { SingleDatePicker } from 'react-dates';
 import moment from 'moment';
 import { s3Upload } from '../libs/awsLib';
 import './Events.css';
 
 export default function Events(props) {
   const file = useRef(null);
-  const [event, setEvent] = useState(null);
+  const [theEvent, setEvent] = useState(null);
   const [content, setContent] = useState('');
+  const [focused, setFocused] = useState(false);
   const [title, setTitle] = useState('');
   const [startDate, setStartDate] = useState(moment());
   const [isLoading, setIsLoading] = useState(false);
@@ -23,17 +25,17 @@ export default function Events(props) {
 
     async function onLoad() {
       try {
-        const event = await loadEvent();
-        const { content, title, startDate, image } = event;
+        const theEvent = await loadEvent();
+        const { content, title, startDate, image } = theEvent;
 
         if (image) {
-          event.imageURL = await Storage.vault.get(image);
+          theEvent.imageURL = await Storage.vault.get(image);
         }
 
         setTitle(title);
         setContent(content);
         setStartDate(moment(startDate));
-        setEvent(event);
+        setEvent(theEvent);
       } catch (e) {
         alert(e);
       }
@@ -54,9 +56,9 @@ export default function Events(props) {
     file.current = event.target.files[0];
   }
 
-  function saveEvent(event) {
+  function saveEvent(theEvent) {
     return API.put('events', `/events/${props.match.params.id}`, {
-      body: event
+      body: theEvent
     });
   }
 
@@ -79,12 +81,11 @@ export default function Events(props) {
       if (file.current) {
         image = await s3Upload(file.current);
       }
-
       await saveEvent({
         title,
         content,
         startDate,
-        image: image || event.image
+        image: image || theEvent.image
       });
       props.history.push('/');
     } catch (e) {
@@ -93,11 +94,15 @@ export default function Events(props) {
     }
   }
 
+  function deleteEvent() {
+    return API.del('events', `/events/${props.match.params.id}`);
+  }
+
   async function handleDelete(event) {
     event.preventDefault();
 
     const confirmed = window.confirm(
-      'Are you sure you want to delete this note?'
+      'Are you sure you want to delete this event?'
     );
 
     if (!confirmed) {
@@ -105,12 +110,27 @@ export default function Events(props) {
     }
 
     setIsDeleting(true);
+
+    try {
+      await deleteEvent();
+      props.history.push('/');
+    } catch (e) {
+      alert(e);
+      setIsDeleting(false);
+    }
   }
 
   return (
     <div className="Events">
-      {event && (
+      {theEvent && (
         <form onSubmit={handleSubmit}>
+          <FormGroup controlId="title">
+            <FormControl
+              value={title}
+              as="textarea"
+              onChange={e => setTitle(e.target.value)}
+            />
+          </FormGroup>
           <FormGroup controlId="content">
             <FormControl
               value={content}
@@ -118,22 +138,31 @@ export default function Events(props) {
               onChange={e => setContent(e.target.value)}
             />
           </FormGroup>
-          {event.image && (
+          <SingleDatePicker
+            date={startDate}
+            onDateChange={setStartDate}
+            focused={focused}
+            onFocusChange={() => setFocused(!focused)}
+            numberOfMonths={1}
+            isOutsideRange={() => false}
+            id="somerandomstring"
+          />
+          {theEvent.image && (
             <FormGroup>
               <ControlLabel>Image</ControlLabel>
               <FormControl.Static>
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={event.imageURL}
+                  href={theEvent.imageURL}
                 >
-                  {formatFilename(event.image)}
+                  {formatFilename(theEvent.image)}
                 </a>
               </FormControl.Static>
             </FormGroup>
           )}
           <FormGroup controlId="file">
-            {!event.image && <ControlLabel>Image</ControlLabel>}
+            {!theEvent.image && <ControlLabel>Image</ControlLabel>}
             <FormControl onChange={handleFileChange} type="file" />
           </FormGroup>
           <LoaderButton
