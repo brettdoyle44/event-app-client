@@ -63,6 +63,7 @@ export default function NewNote(props) {
     <div className="NewEvent">
       <form onSubmit={handleSubmit}>
         <FormGroup controlId="title">
+          <ControlLabel>Title</ControlLabel>
           <FormControl
             value={title}
             as="textarea"
@@ -70,21 +71,25 @@ export default function NewNote(props) {
           />
         </FormGroup>
         <FormGroup controlId="content">
+          <ControlLabel>Description</ControlLabel>
           <FormControl
             value={content}
             componentClass="textarea"
             onChange={e => setContent(e.target.value)}
           />
         </FormGroup>
-        <SingleDatePicker
-          date={startDate}
-          onDateChange={setStartDate}
-          focused={focused}
-          onFocusChange={() => setFocused(!focused)}
-          numberOfMonths={1}
-          isOutsideRange={() => false}
-          id="somerandomstring"
-        />
+        <FormGroup controlId="startDate">
+          <ControlLabel style={{ display: 'block' }}>Start Date</ControlLabel>
+          <SingleDatePicker
+            date={startDate}
+            onDateChange={setStartDate}
+            focused={focused}
+            onFocusChange={() => setFocused(!focused)}
+            numberOfMonths={1}
+            isOutsideRange={() => false}
+            id="somerandomstring"
+          />
+        </FormGroup>
         <FormGroup controlId="imagePath">
           <ControlLabel>Image</ControlLabel>
           <FormControl onChange={handleFileChange} type="file" />
@@ -93,7 +98,7 @@ export default function NewNote(props) {
           block
           type="submit"
           bsSize="large"
-          bsStyle="primary"
+          style={{ backgroundColor: '#66FCF1' }}
           isLoading={isLoading}
           disabled={!validateForm()}
         >

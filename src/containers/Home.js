@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ListGroupItem, Button, Media } from 'react-bootstrap';
 import { API, Storage } from 'aws-amplify';
 import './Home.css';
 
@@ -21,25 +21,6 @@ export default function Home(props) {
           const imageUrl = await Storage.vault.get(event.image);
           event.imageUrl = imageUrl;
         }
-        console.log(events);
-        // let imageEvents = [];
-        // events.map(event => {
-        //   if (event.image) {
-        //     const eventIMG = Storage.vault.get(event.image);
-        //     return imageEvents.push({
-        //       title: event.title,
-        //       content: event.title,
-        //       image: eventIMG,
-        //       startDate: event.startDate
-        //     });
-        //   } else {
-        //     return imageEvents.push({
-        //       title: event.title,
-        //       content: event.title,
-        //       startDate: event.startDate
-        //     });
-        //   }
-        // });
         setEvents(events);
       } catch (e) {
         alert(e);
@@ -56,16 +37,32 @@ export default function Home(props) {
   }
 
   function renderEventsList(events) {
-    return [...events].map((event, i) =>
+    return [{}].concat(events).map((event, i) =>
       i !== 0 ? (
         <LinkContainer key={event.eventid} to={`/events/${event.eventid}`}>
-          <ListGroupItem header={event.title}>
-            {event.content}
-            <br />
-            <img src={event.imageUrl} alt={event.title} />
-            <br />
-            {'Created: ' + new Date(event.startDate).toLocaleString()}
-          </ListGroupItem>
+          <Media>
+            <Media.Left>
+              <img
+                width={64}
+                height={64}
+                src={event.imageUrl}
+                alt={event.title}
+              />
+            </Media.Left>
+            <Media.Body>
+              <Media.Heading>{event.title}</Media.Heading>
+              <p>{event.content}</p>
+              {'Start Date: ' +
+                new Date(event.startDate).toLocaleString('en', {
+                  weekday: 'short',
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: 'numeric'
+                })}{' '}
+              {' | '}
+              {'Created: ' + new Date(event.createdAt).toLocaleString()}
+            </Media.Body>
+          </Media>
         </LinkContainer>
       ) : (
         <LinkContainer key="new" to="/events/new">
@@ -81,18 +78,30 @@ export default function Home(props) {
 
   function renderLander() {
     return (
-      <div className="lander">
-        <h1>Eve</h1>
-        <p>A simple event app</p>
+      <div className="landerTwo">
+        <h1>WELCOME</h1>
+        <p>
+          Eve is a simple content management system built for event management.
+          Most CMS's lend themselves to either product E-commerce or Blogging.
+          Eve aims to make is easy for you to create, manage, and integrate
+          events right into your existing website structure.
+        </p>
+        <p>
+          <LinkContainer key="new" to="/signup">
+            <Button bsSize="large" className="lb-btn">
+              Get Started
+            </Button>
+          </LinkContainer>
+        </p>
       </div>
     );
   }
 
   function renderEvents() {
     return (
-      <div className="event">
-        <PageHeader>Your Events</PageHeader>
-        <ListGroup>{!isLoading && renderEventsList(events)}</ListGroup>
+      <div className="events">
+        <h1>Your Events</h1>
+        <div>{!isLoading && renderEventsList(events)}</div>
       </div>
     );
   }

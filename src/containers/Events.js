@@ -125,6 +125,7 @@ export default function Events(props) {
       {theEvent && (
         <form onSubmit={handleSubmit}>
           <FormGroup controlId="title">
+            <ControlLabel>Title</ControlLabel>
             <FormControl
               value={title}
               as="textarea"
@@ -132,21 +133,25 @@ export default function Events(props) {
             />
           </FormGroup>
           <FormGroup controlId="content">
+            <ControlLabel>Description</ControlLabel>
             <FormControl
               value={content}
               componentClass="textarea"
               onChange={e => setContent(e.target.value)}
             />
           </FormGroup>
-          <SingleDatePicker
-            date={startDate}
-            onDateChange={setStartDate}
-            focused={focused}
-            onFocusChange={() => setFocused(!focused)}
-            numberOfMonths={1}
-            isOutsideRange={() => false}
-            id="somerandomstring"
-          />
+          <FormGroup controlId="startDate">
+            <ControlLabel style={{ display: 'block' }}>Start Date</ControlLabel>
+            <SingleDatePicker
+              date={startDate}
+              onDateChange={setStartDate}
+              focused={focused}
+              onFocusChange={() => setFocused(!focused)}
+              numberOfMonths={1}
+              isOutsideRange={() => false}
+              id="somerandomstring"
+            />
+          </FormGroup>
           {theEvent.image && (
             <FormGroup>
               <ControlLabel>Image</ControlLabel>
@@ -169,7 +174,7 @@ export default function Events(props) {
             block
             type="submit"
             bsSize="large"
-            bsStyle="primary"
+            style={{ backgroundColor: '#1f2833', color: '#66FCF1' }}
             isLoading={isLoading}
             disabled={!validateForm()}
           >

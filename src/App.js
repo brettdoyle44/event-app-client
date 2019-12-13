@@ -36,11 +36,21 @@ function App(props) {
   }
   return (
     !isAuthenticating && (
-      <div className="App container">
-        <Navbar fluid collapseOnSelect>
+      <div style={{ padding: '0px', margin: '0px' }}>
+        <Navbar
+          style={{
+            backgroundColor: '#000000',
+            border: '0px solid #1F2833',
+            borderRadius: '0px'
+          }}
+          fluid
+          collapseOnSelect
+        >
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">Eve</Link>
+              <Link to="/" style={{ color: '#66FCF1', fontWeight: '700' }}>
+                Eve
+              </Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>

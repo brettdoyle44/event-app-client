@@ -54,6 +54,7 @@ export default function Login(props) {
           block
           type="submit"
           bsSize="large"
+          style={{ backgroundColor: '#1f2833', color: '#66FCF1' }}
           isLoading={isLoading}
           disabled={!validateForm()}
         >
